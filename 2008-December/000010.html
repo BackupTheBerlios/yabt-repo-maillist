@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.ab24be973a89.1228510724.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000009.html">
+   <LINK REL="Next"  HREF="000011.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: 2 new changesets</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.ab24be973a89.1228510724.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: 2 new changesets">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Fri Dec  5 21:58:44 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000009.html">[Yabt-repo] /hgroot/repos/yabt: 5 new changesets
+</A></li>
+        <LI>Next message: <A HREF="000011.html">[Yabt-repo] /hgroot/repos/yabt: This commit is for YABT-2.0b2. Only	changes ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10">[ date ]</a>
+              <a href="thread.html#10">[ thread ]</a>
+              <a href="subject.html#10">[ subject ]</a>
+              <a href="author.html#10">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/ab24be973a89
+changeset: 81:ab24be973a89
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Fri Dec 05 20:55:52 2008 +0000
+description:
+Fixed a has_key call on a dict which may cause problems for future python 3.0 migration.
+
+details:   /hgroot/repos/yabt/rev/1a622f3d984a
+changeset: 82:1a622f3d984a
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Fri Dec 05 21:05:10 2008 +0000
+description:
+Removed some more has_key calls for python3.0.
+
+diffstat:
+
+2 files changed, 3 insertions(+), 3 deletions(-)
+YABT/loaders.py |    2 +-
+YABT/rules.py   |    4 ++--
+
+diffs (32 lines):
+
+diff -r 1628ce63450c -r 1a622f3d984a YABT/loaders.py
+--- a/YABT/loaders.py	Fri Dec 05 16:27:39 2008 +0000
++++ b/YABT/loaders.py	Fri Dec 05 21:05:10 2008 +0000
+@@ -111,7 +111,7 @@
+             self._repl = &quot;&quot;
+         elif self._path == &quot;.transtable.YABTdata.decision&quot;:
+             iclass = int(attrs[&quot;inputclass&quot;])
+-            if not self.__decisions.has_key(iclass):
++            if not iclass in self.__decisions:
+                 self.__decisions.update({iclass: set()})
+             for state in attrs[&quot;states&quot;].split(&quot;,&quot;):
+                 self.__decisions[iclass].add(int(state))
+diff -r 1628ce63450c -r 1a622f3d984a YABT/rules.py
+--- a/YABT/rules.py	Fri Dec 05 16:27:39 2008 +0000
++++ b/YABT/rules.py	Fri Dec 05 21:05:10 2008 +0000
+@@ -109,14 +109,14 @@
+         group: this is the group and state the rule belongs to in a tuple
+ 
+         &quot;&quot;&quot;
+-        if not self.__groups.has_key(group):
++        if not group in self.__groups:
+             self.__groups.update({group: []})
+         self.__groups[group].append(rule)
+ 
+     def isMatch(self, state, text, position, end):
+         &quot;&quot;&quot;Find the rule or return None if no rule matches&quot;&quot;&quot;
+         group = text[position]
+-        if not self.__groups.has_key((group, state)):
++        if not (group, state) in self.__groups:
+             return None
+         for rule in self.__groups[(group, state)]:
+             selectedRule = rule.isMatch(state, text, position, end)
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000009.html">[Yabt-repo] /hgroot/repos/yabt: 5 new changesets
+</A></li>
+	<LI>Next message: <A HREF="000011.html">[Yabt-repo] /hgroot/repos/yabt: This commit is for YABT-2.0b2. Only	changes ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10">[ date ]</a>
+              <a href="thread.html#10">[ thread ]</a>
+              <a href="subject.html#10">[ subject ]</a>
+              <a href="author.html#10">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

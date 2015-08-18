@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.f4951a85ba04.1246294707.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: 2 new changesets</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.f4951a85ba04.1246294707.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: 2 new changesets">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Mon Jun 29 18:58:27 CEST 2009</I>
+    <P><UL>
+        
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/f4951a85ba04
+changeset: 108:f4951a85ba04
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>
+date:      Sun May 31 16:49:17 2009 +0100
+description:
+Made a branch for YABT 3.0, this may be a lengthy process and may break from time to time.
+
+details:   /hgroot/repos/yabt/rev/1986a5654141
+changeset: 109:1986a5654141
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>
+date:      Mon Jun 29 17:58:07 2009 +0100
+description:
+Altered YABT to not use charmaps, instead the object passed about is uppercase with the original as member variable .orig.
+
+diffstat:
+
+ YABT/loaders.py       |  15 +--------------
+ YABT/translators.py   |  39 +++++++++------------------------------
+ tests/YABT/loaders.py |   5 -----
+ 3 files changed, 10 insertions(+), 49 deletions(-)
+
+diffs (159 lines):
+
+diff -r b596426d58de -r 1986a5654141 YABT/loaders.py
+--- a/YABT/loaders.py	Fri May 01 10:08:09 2009 +0000
++++ b/YABT/loaders.py	Mon Jun 29 17:58:07 2009 +0100
+@@ -102,13 +102,6 @@
+         self._path += &quot;.&quot; + name
+         if name == &quot;char&quot;:
+             self._characterData(unichr(int(attrs[&quot;ord&quot;])))
+-        elif self._path == &quot;.transtable.YABTdata.charmap&quot;:
+-            self._orig = None
+-            self._repl = None
+-        elif self._path == &quot;.transtable.YABTdata.charmap.orig&quot;:
+-            self._orig = &quot;&quot;
+-        elif self._path == &quot;.transtable.YABTdata.charmap.repl&quot;:
+-            self._repl = &quot;&quot;
+         elif self._path == &quot;.transtable.YABTdata.decision&quot;:
+             iclass = int(attrs[&quot;inputclass&quot;])
+             if not iclass in self.__decisions:
+@@ -143,8 +136,6 @@
+         &quot;&quot;&quot;Method called when an end tag is encountered&quot;&quot;&quot;
+         if name == &quot;char&quot;:
+             pass
+-        elif self._path == &quot;.transtable.YABTdata.charmap&quot;:
+-            self._translator.addCharacterMap(self._orig, self._repl)
+         elif self._path == &quot;.transtable.YABTdata.rule&quot;:
+             self._addRule()
+         elif self._path.startswith(&quot;.transtable.metadata.YABT_custom_matches.&quot;):
+@@ -155,11 +146,7 @@
+ 
+     def _characterData(self, data):
+         &quot;&quot;&quot;Method called when a text element is encountered&quot;&quot;&quot;
+-        if self._path == &quot;.transtable.YABTdata.charmap.orig&quot;:
+-            self._orig += data
+-        elif self._path == &quot;.transtable.YABTdata.charmap.repl&quot;:
+-            self._repl += data
+-        elif self._path == &quot;.transtable.YABTdata.rule.iclass&quot;:
++        if self._path == &quot;.transtable.YABTdata.rule.iclass&quot;:
+             self._iclass += data
+         elif self._path == &quot;.transtable.YABTdata.rule.focus&quot;:
+             self._focus += data
+diff -r b596426d58de -r 1986a5654141 YABT/translators.py
+--- a/YABT/translators.py	Fri May 01 10:08:09 2009 +0000
++++ b/YABT/translators.py	Mon Jun 29 17:58:07 2009 +0100
+@@ -19,12 +19,18 @@
+ 
+ logging.getLogger(&quot;YABT.translators&quot;).manager.emittedNoHandlerWarning = True
+ 
++class TranslatorText(unicode):
++    def __new__(cls, text):
++        return unicode(text.upper())
++    def __init__(self, text):
++        self.orig = text
++        print(self)
++
+ class BaseTranslator(psyobj):
+     &quot;&quot;&quot;
+     The super class for all translator classes
+ 
+     Methods are:
+-    addCharacterMap: Add a character mapping
+     addState: Add a state to the known list of states
+     addRule: Add a rule to the translator
+     load: Load a loader object
+@@ -35,17 +41,6 @@
+ 
+     &quot;&quot;&quot;
+ 
+-    def addCharacterMap(self, orig, repl):
+-        &quot;&quot;&quot;
+-        Add a character mapping to the translator
+-
+-        Arguments are:
+-        orig: the original character
+-        repl: the replacement character
+-
+-        &quot;&quot;&quot;
+-        raise NotImplementedError(&quot;Class is abstract&quot;)
+-
+     def addState(self, state):
+         &quot;&quot;&quot;
+         Adds a state to the list of known states
+@@ -110,7 +105,6 @@
+     &quot;&quot;&quot;
+     The class for doing text translation
+ 
+-    addRule: A method to add a rule to the translator.
+     addState: adds a state to the list of known states
+     addCharacterMap: Add a character mapping to the translator.
+     getStates: Show all valid states for the translator.
+@@ -124,7 +118,6 @@
+         self._logger = logging.getLogger(&quot;YABT.translators.Translator&quot;)
+         if self._logger.level == 0:
+             self._logger.setLevel(logging.WARNING)
+-        self._charMaps = {}
+         self._rules = []
+         self.state = 0
+         self._states = set()
+@@ -153,19 +146,6 @@
+             self._logger.info(&quot;Adding state &quot; + str(state))
+         self._states.add(state)
+ 
+-    def addCharacterMap(self, orig, repl):
+-        &quot;&quot;&quot;
+-        Adds a character mapping to the translator
+-
+-        Arguments are:
+-        orig: The original character.
+-        repl: the character to replace orig with.
+-
+-        &quot;&quot;&quot;
+-        if self._logger.isEnabledFor(logging.INFO):
+-            self._logger.info(&quot;Adding charmap from &quot; + orig + &quot; to &quot; + repl)
+-        self._charMaps.update({orig: repl})
+-
+     def noRuleHandler(self, state, text, start, end):
+         &quot;&quot;&quot;
+         This implementation simply inserts the character into the output
+@@ -202,9 +182,8 @@
+         output = array.array(&quot;u&quot;)
+         position = len(bfcontext)
+         end = position + len(text)
+-        fullText = u&quot;&quot;.join([bfcontext, text, afcontext])
+-        for orig, repl in self._charMaps.iteritems():
+-            fullText = fullText.replace(orig, repl)
++        origText = u&quot;&quot;.join([bfcontext, text, afcontext])
++        fullText = TranslatorText(origText)
+         while position &lt; end:
+             selectedRule = None
+             for rule in self._rules:
+diff -r b596426d58de -r 1986a5654141 tests/YABT/loaders.py
+--- a/tests/YABT/loaders.py	Fri May 01 10:08:09 2009 +0000
++++ b/tests/YABT/loaders.py	Mon Jun 29 17:58:07 2009 +0100
+@@ -8,11 +8,8 @@
+ 
+ class FakeTranslator:
+     def __init__(self):
+-        self.charMaps = 0
+         self.states = 0
+         self.rules = 0
+-    def addCharacterMap(self, orig, repl):
+-        self.charMaps += 1
+     def addState(self, state):
+         self.states += 1
+     def addRule(self, rule):
+@@ -43,7 +40,6 @@
+     def testLoad(self):
+         t = FakeTranslator()
+         t.load(self.loader)
+-        self.assertEquals(28, t.charMaps)
+         self.assertEquals(13, t.states)
+         self.assertEquals(1, t.rules)
+ 
+@@ -69,7 +65,6 @@
+     def testLoad(self):
+         t = FakeTranslator()
+         t.load(self.loader)
+-        self.assertEquals(28, t.charMaps)
+         self.assertEquals(13, t.states)
+         self.assertEquals(1, t.rules)
+ 
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

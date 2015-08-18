@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.b3f0451e74c3.1228942077.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000012.html">
+   <LINK REL="Next"  HREF="000014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: 2 new changesets</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.b3f0451e74c3.1228942077.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: 2 new changesets">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Wed Dec 10 21:47:57 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000012.html">[Yabt-repo] /hgroot/repos/yabt: This corrects the problem with the	__version...
+</A></li>
+        <LI>Next message: <A HREF="000014.html">[Yabt-repo] /hgroot/repos/yabt: I think I have created a fix for	the version...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/b3f0451e74c3
+changeset: 85:b3f0451e74c3
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Wed Dec 10 15:19:25 2008 +0000
+description:
+Added default values to be shown in help messages.
+Altered version number to be development version towards 2.0b2Update1
+
+details:   /hgroot/repos/yabt/rev/a942586aa3f0
+changeset: 86:a942586aa3f0
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Wed Dec 10 20:55:50 2008 +0000
+description:
+Added a MANIFEST.in file as it was felt that hg.setuptools was causing more problems than it solved.
+
+diffstat:
+
+4 files changed, 12 insertions(+), 5 deletions(-)
+MANIFEST.in |    5 +++++
+README      |    5 +++--
+YABT/app.py |    5 +++--
+setup.py    |    2 +-
+
+diffs (53 lines):
+
+diff -r 4b9e03367b08 -r a942586aa3f0 MANIFEST.in
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/MANIFEST.in	Wed Dec 10 20:55:50 2008 +0000
+@@ -0,0 +1,5 @@
++include LICENSE ChangeLog pylint.rc ez_setup.py version.py
++recursive-include docs *.txt *.rst
++recursive-include tests *.py *.xml test_data/*
++recursive-include YABT/tables *
++global-exclude .hg
+diff -r 4b9e03367b08 -r a942586aa3f0 README
+--- a/README	Tue Dec 09 10:57:56 2008 +0000
++++ b/README	Wed Dec 10 20:55:50 2008 +0000
+@@ -67,8 +67,9 @@
+ Should you wish to install from source, then you don't need to have setuptools installed as the setup script will 
+ install it should it be missing. All you should need to do to install from source is to run ``python setup.py install`` 
+ in the base directory of the source distribution. Please note if you obtained the YABT sources from the mercurial 
+-repository then you will need hg.setuptools which can be found at `pypi &lt;<A HREF="http://pypi.python.org/pypi/hg.setuptools">http://pypi.python.org/pypi/hg.setuptools</A>&gt;`_ 
+-otherwise setuptools will be unable to work out what files are part of the distribution.
++repository, in the past it was required that you should have hg.setuptools installed, this is no longer the case and you 
++would be recommended to remove it. This has been changed as it was found that hg.setuptools did not seem to behave well 
++when using a source distribution so this is why the alteration and the recommendation to remove it has been made.
+ 
+ Included scripts
+ ================
+diff -r 4b9e03367b08 -r a942586aa3f0 YABT/app.py
+--- a/YABT/app.py	Tue Dec 09 10:57:56 2008 +0000
++++ b/YABT/app.py	Wed Dec 10 20:55:50 2008 +0000
+@@ -12,10 +12,11 @@
+     parser = optparse.OptionParser(usage=&quot;%prog [OPTIONS] INFILE&quot;, 
+                                    version=&quot;%prog 2.0&quot;)
+     parser.add_option(&quot;-t&quot;, &quot;--table&quot;, dest=&quot;table&quot;, 
+-                      help=&quot;use the table specified for translation&quot;)
++                      help=&quot;use the table specified for translation &quot; +
++                           &quot;[DEFAULT: %default]&quot;)
+     parser.add_option(&quot;-s&quot;, &quot;--state&quot;, dest=&quot;state&quot;, type=&quot;int&quot;,
+                       help=&quot;Specify the state to use, usually 1 for grade1&quot; +
+-                      &quot;or 2 for grade2&quot;)
++                      &quot;or 2 for grade2 [DEFAULT: %default]&quot;)
+     parser.set_defaults(table=&quot;britishtobrl.xml&quot;, state=2)
+     options, args = parser.parse_args()
+     if len(args) != 1:
+diff -r 4b9e03367b08 -r a942586aa3f0 setup.py
+--- a/setup.py	Tue Dec 09 10:57:56 2008 +0000
++++ b/setup.py	Wed Dec 10 20:55:50 2008 +0000
+@@ -4,7 +4,7 @@
+ from setuptools import setup
+ import logging
+ import version
+-__version__ = version.getVersion(&quot;2.0b2&quot;)
++__version__ = version.getVersion(&quot;2.0b2Update1.dev&quot;)
+ log = logging.root
+ setup(name='YABT',
+ version=__version__,
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000012.html">[Yabt-repo] /hgroot/repos/yabt: This corrects the problem with the	__version...
+</A></li>
+	<LI>Next message: <A HREF="000014.html">[Yabt-repo] /hgroot/repos/yabt: I think I have created a fix for	the version...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

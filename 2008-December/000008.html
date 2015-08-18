@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.97d4ad627813.1228146842.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000007.html">
+   <LINK REL="Next"  HREF="000009.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: 2 new changesets</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.97d4ad627813.1228146842.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: 2 new changesets">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Mon Dec  1 16:54:02 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000007.html">[Yabt-repo] /hgroot/repos/yabt: I think we need to trim node value	to 12 cha...
+</A></li>
+        <LI>Next message: <A HREF="000009.html">[Yabt-repo] /hgroot/repos/yabt: 5 new changesets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#8">[ date ]</a>
+              <a href="thread.html#8">[ thread ]</a>
+              <a href="subject.html#8">[ subject ]</a>
+              <a href="author.html#8">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/97d4ad627813
+changeset: 74:97d4ad627813
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Mon Dec 01 16:02:13 2008 +0000
+description:
+Added version.py to setup.py. Changed the separator of rev and node to -.
+
+details:   /hgroot/repos/yabt/rev/147c674f1301
+changeset: 75:147c674f1301
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Mon Dec 01 16:02:52 2008 +0000
+description:
+Should PKG-INFO be in repository? I think not.
+
+diffstat:
+
+4 files changed, 3 insertions(+), 31 deletions(-)
+PKG-INFO   |   25 -------------------------
+setup.cfg  |    4 ----
+setup.py   |    3 ++-
+version.py |    2 +-
+
+diffs (64 lines):
+
+diff -r 84f815a9aeba -r 147c674f1301 PKG-INFO
+--- a/PKG-INFO	Mon Dec 01 15:49:30 2008 +0000
++++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+@@ -1,25 +0,0 @@
+-Metadata-Version: 1.0
+-Name: YABT
+-Version: 2.0b2.dev-20081125
+-Summary: YABT: Yet Another Braille Translator
+-Home-page: <A HREF="http://yabt.berlios.de">http://yabt.berlios.de</A>
+-Author: Michael Whapples
+-Author-email: <A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>
+-License: RPL
+-Description: 
+-        YABT: Yet another Braille Translator
+-        
+-        YABT is a general purpose Braille translation system written in pure python. It is primarily designed to be used by the
+-        `BrlTex Project &lt;<A HREF="http://brltex.sf.net">http://brltex.sf.net</A>&gt;`_, but due to its general design it may be suited to use in other projects.
+-        
+-        Currently YABT has a table for translation in to British Braille encoded in ASCII Braille, but tables for other codes
+-        and other output encodings such as unicode Braille are possible.
+-        
+-Platform: UNKNOWN
+-Classifier: Development Status :: 5 - Production/Stable
+-Classifier: Intended Audience :: Developers
+-Classifier: License :: OSI Approved
+-Classifier: Operating System :: OS Independent
+-Classifier: Programming Language :: Python
+-Classifier: Topic :: Adaptive Technologies
+-Classifier: Topic :: Software Development
+diff -r 84f815a9aeba -r 147c674f1301 setup.cfg
+--- a/setup.cfg	Mon Dec 01 15:49:30 2008 +0000
++++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+@@ -1,4 +0,0 @@
+-[egg_info]
+-tag_build = .dev
+-tag_date = 1
+-tag_svn_revision = 0
+diff -r 84f815a9aeba -r 147c674f1301 setup.py
+--- a/setup.py	Mon Dec 01 15:49:30 2008 +0000
++++ b/setup.py	Mon Dec 01 16:02:52 2008 +0000
+@@ -3,9 +3,10 @@
+ ez_setup.use_setuptools()
+ from setuptools import setup
+ import logging
++import version
+ log = logging.root
+ setup(name='YABT',
+-version='2.0b2',
++version=version.getVersion('2.0b2.dev'),
+ author='Michael Whapples',
+ author_email='<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>',
+ url='<A HREF="http://yabt.berlios.de">http://yabt.berlios.de</A>',
+diff -r 84f815a9aeba -r 147c674f1301 version.py
+--- a/version.py	Mon Dec 01 15:49:30 2008 +0000
++++ b/version.py	Mon Dec 01 16:02:52 2008 +0000
+@@ -32,7 +32,7 @@
+         return bv
+     if info is not None:
+         # We have repository information so let's use it
+-        return &quot;%s-r%s_%s&quot; % (bv, info['rev'], info['node'][:12])
++        return &quot;%s-r%s-%s&quot; % (bv, info['rev'], info['node'][:12])
+     if os.path.isdir(&quot;.hg&quot;):
+         # Appears to be a repository but can't find mercurial
+         return &quot;%s-rUnknown&quot; % bv
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000007.html">[Yabt-repo] /hgroot/repos/yabt: I think we need to trim node value	to 12 cha...
+</A></li>
+	<LI>Next message: <A HREF="000009.html">[Yabt-repo] /hgroot/repos/yabt: 5 new changesets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#8">[ date ]</a>
+              <a href="thread.html#8">[ thread ]</a>
+              <a href="subject.html#8">[ subject ]</a>
+              <a href="author.html#8">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

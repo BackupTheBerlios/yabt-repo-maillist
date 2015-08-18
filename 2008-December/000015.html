@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: Added a -o or --output option to	YABT_transl...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20Added%20a%20-o%20or%20--output%20option%20to%0A%09YABT_transl...&In-Reply-To=%3Chg.1e4af655eb43.1229079630.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000014.html">
+   <LINK REL="Next"  HREF="000016.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: Added a -o or --output option to	YABT_transl...</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20Added%20a%20-o%20or%20--output%20option%20to%0A%09YABT_transl...&In-Reply-To=%3Chg.1e4af655eb43.1229079630.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: Added a -o or --output option to	YABT_transl...">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Fri Dec 12 12:00:30 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000014.html">[Yabt-repo] /hgroot/repos/yabt: I think I have created a fix for	the version...
+</A></li>
+        <LI>Next message: <A HREF="000016.html">[Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#15">[ date ]</a>
+              <a href="thread.html#15">[ thread ]</a>
+              <a href="subject.html#15">[ subject ]</a>
+              <a href="author.html#15">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/1e4af655eb43
+changeset: 88:1e4af655eb43
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Fri Dec 12 11:08:47 2008 +0000
+description:
+Added a -o or --output option to YABT_translate for optional file output.
+
+diffstat:
+
+1 files changed, 14 insertions(+), 2 deletions(-)
+YABT/app.py |   16 ++++++++++++++--
+
+diffs (33 lines):
+
+diff -r 6f7570fae787 -r 1e4af655eb43 YABT/app.py
+--- a/YABT/app.py	Wed Dec 10 21:45:28 2008 +0000
++++ b/YABT/app.py	Fri Dec 12 11:08:47 2008 +0000
+@@ -20,7 +20,10 @@
+     parser.add_option(&quot;-s&quot;, &quot;--state&quot;, dest=&quot;state&quot;, type=&quot;int&quot;,
+                       help=&quot;Specify the state to use, usually 1 for grade1&quot; +
+                       &quot;or 2 for grade2 [DEFAULT: %default]&quot;)
+-    parser.set_defaults(table=&quot;britishtobrl.xml&quot;, state=2)
++    parser.add_option(&quot;-o&quot;, &quot;--output&quot;, dest=&quot;outfile&quot;,
++                      help=&quot;Output to a file instead of STDOUT &quot; +
++                      &quot;[DEFAULT %default]&quot;)
++    parser.set_defaults(table=&quot;britishtobrl.xml&quot;, state=2, outfile=None)
+     options, args = parser.parse_args()
+     if len(args) != 1:
+         parser.error(&quot;You need to specify an input file&quot;)
+@@ -45,7 +48,16 @@
+     else:
+         parser.error(&quot;INFILE not found&quot;)
+     translator.load(loader)
+-    print(translator.translate(inText, options.state, &quot; &quot;, &quot; &quot;))
++    output = translator.translate(inText, options.state, &quot; &quot;, &quot; &quot;)
++    if options.outfile is None:
++        print(output)
++    else:
++        try:
++            f = open(options.outfile, 'w')
++            f.write(output)
++            f.close()
++        except:
++            parser.error(&quot;Can't write output file&quot;)
+     return 0
+ 
+ if &quot;__main__&quot; == __name__:
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000014.html">[Yabt-repo] /hgroot/repos/yabt: I think I have created a fix for	the version...
+</A></li>
+	<LI>Next message: <A HREF="000016.html">[Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#15">[ date ]</a>
+              <a href="thread.html#15">[ thread ]</a>
+              <a href="subject.html#15">[ subject ]</a>
+              <a href="author.html#15">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

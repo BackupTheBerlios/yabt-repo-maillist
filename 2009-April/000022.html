@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: 3 new changesets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%203%20new%20changesets&In-Reply-To=%3Chg.adb9a49adcb9.1238578163.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000021.html">
+   <LINK REL="Next"  HREF="000023.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: 3 new changesets</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%203%20new%20changesets&In-Reply-To=%3Chg.adb9a49adcb9.1238578163.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: 3 new changesets">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Wed Apr  1 11:29:23 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000021.html">[Yabt-repo] /hgroot/repos/yabt: Adjusted README so that the list is	correct ...
+</A></li>
+        <LI>Next message: <A HREF="000023.html">[Yabt-repo] /hgroot/repos/yabt: Added a document ?o explain about	the XML tr...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/adb9a49adcb9
+changeset: 101:adb9a49adcb9
+user:      Michael Whapples
+date:      Wed Apr 01 09:10:30 2009 +0000
+description:
+Added a file describing the word substitution dictionary table format.
+
+details:   /hgroot/repos/yabt/rev/968d7797a128
+changeset: 102:968d7797a128
+user:      Michael Whapples
+date:      Wed Apr 01 09:14:02 2009 +0000
+description:
+Altered the version number for 2.0b3 as a release would be good for people to test if they don't want to use mercurial and want to report issues which may affect 2.0 final which is the next planned release. Should be feature freeze until 2.0 now.
+
+details:   /hgroot/repos/yabt/rev/f32b1e970fea
+changeset: 103:f32b1e970fea
+user:      Michael Whapples
+date:      Wed Apr 01 09:29:44 2009 +0000
+description:
+Altered setup.py so that it is now on working towards 2.0 (IE. development versions are 2.0.devxx...).
+
+diffstat:
+
+ docs/WritingWordDictionaryTables.txt |  34 ++++++++++++++++++++++++++++++++++
+ setup.py                             |   2 +-
+ 2 files changed, 35 insertions(+), 1 deletions(-)
+
+diffs (50 lines):
+
+diff -r aa0cafd4b949 -r f32b1e970fea docs/WritingWordDictionaryTables.txt
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/docs/WritingWordDictionaryTables.txt	Wed Apr 01 09:29:44 2009 +0000
+@@ -0,0 +1,34 @@
++===========================================
++Writing Word Substitution Dictionary Tables
++===========================================
++
++Introduction
++============
++
++This document describes the format of word substitution dictionary tables used by YABT. After reading this document you should be able to create your own word substitution dictionaries and understand some of the limitations of the format.
++
++---------------------------------------
++What is a word Substitution dictionary?
++---------------------------------------
++
++A word substitution dictionary is a simple list of words which when YABT encounters should simply substitute for a replacement form. YABT does allow users to define which states (which in the case of Braille refer to the grade of Braille) the substitution can be made.
++
++Writing the table
++=================
++
++The format of the word substitution dictionary table supported by YABT is currently a multi-column plain text file. Each column is separated by whitespace (eg. tabs or spaces).
++
++The contents of each column are as follows:
++
++1. The state in which the substitution can be made. For the British Braille table (britishtobrl.xml) the state relates to the grade of the Braille. States of interest are:
++  * State 1 is for grade 1
++  * State 2 is for grade 2
++  * State 5 is for computer Braille
++  
++  State should always be an integer. If multiple states should be specified then multiple rows should be inserted, although if requests are recieved for supporting lists of states in one row recieved this may be altered in the future.
++2. The original word. A word is defined as a block of alphabetic characters surrounded by any non-alphabetic characters. This means multi-word contractions such as those for ``of the`` cannot be specified in these tables. You should also be aware that you may have to specify entries in a form suitable for the table being used (eg. when using the British Braille table britishtobrl.xml you should specify the entries in uppercase). Failure to specify the entries in the form desired by the main translation table will not raise any errors but the word substitutions may not be applied as expected or even fail to ever be applied.
++3. The replacement text. This can be any text so long as it doesn't contain whitespace characters. Other than no whitespace characters there are no special requirements of this column.
++
++
++
++
+diff -r aa0cafd4b949 -r f32b1e970fea setup.py
+--- a/setup.py	Wed Apr 01 08:30:57 2009 +0000
++++ b/setup.py	Wed Apr 01 09:29:44 2009 +0000
+@@ -4,7 +4,7 @@
+ from setuptools import setup
+ import logging
+ import version
+-__version__ = version.getVersion(&quot;2.0b3.dev&quot;)
++__version__ = version.getVersion(&quot;2.0.dev&quot;)
+ log = logging.root
+ setup(name='YABT',
+ version=__version__,
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000021.html">[Yabt-repo] /hgroot/repos/yabt: Adjusted README so that the list is	correct ...
+</A></li>
+	<LI>Next message: <A HREF="000023.html">[Yabt-repo] /hgroot/repos/yabt: Added a document ?o explain about	the XML tr...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

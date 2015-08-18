@@ -1,0 +1,190 @@
+From mwhapples at users.berlios.de  Mon Jun 29 18:58:27 2009
+From: mwhapples at users.berlios.de (mwhapples at users.berlios.de)
+Date: Mon, 29 Jun 2009 18:58:27 +0200
+Subject: [Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+Message-ID: <hg.f4951a85ba04.1246294707.-2036687633@sheep.berlios.de>
+
+details:   /hgroot/repos/yabt/rev/f4951a85ba04
+changeset: 108:f4951a85ba04
+user:      Michael Whapples <mwhapples at users.berlios.de
+date:      Sun May 31 16:49:17 2009 +0100
+description:
+Made a branch for YABT 3.0, this may be a lengthy process and may break from time to time.
+
+details:   /hgroot/repos/yabt/rev/1986a5654141
+changeset: 109:1986a5654141
+user:      Michael Whapples <mwhapples at users.berlios.de
+date:      Mon Jun 29 17:58:07 2009 +0100
+description:
+Altered YABT to not use charmaps, instead the object passed about is uppercase with the original as member variable .orig.
+
+diffstat:
+
+ YABT/loaders.py       |  15 +--------------
+ YABT/translators.py   |  39 +++++++++------------------------------
+ tests/YABT/loaders.py |   5 -----
+ 3 files changed, 10 insertions(+), 49 deletions(-)
+
+diffs (159 lines):
+
+diff -r b596426d58de -r 1986a5654141 YABT/loaders.py
+--- a/YABT/loaders.py	Fri May 01 10:08:09 2009 +0000
++++ b/YABT/loaders.py	Mon Jun 29 17:58:07 2009 +0100
+@@ -102,13 +102,6 @@
+         self._path += "." + name
+         if name == "char":
+             self._characterData(unichr(int(attrs["ord"])))
+-        elif self._path == ".transtable.YABTdata.charmap":
+-            self._orig = None
+-            self._repl = None
+-        elif self._path == ".transtable.YABTdata.charmap.orig":
+-            self._orig = ""
+-        elif self._path == ".transtable.YABTdata.charmap.repl":
+-            self._repl = ""
+         elif self._path == ".transtable.YABTdata.decision":
+             iclass = int(attrs["inputclass"])
+             if not iclass in self.__decisions:
+@@ -143,8 +136,6 @@
+         """Method called when an end tag is encountered"""
+         if name == "char":
+             pass
+-        elif self._path == ".transtable.YABTdata.charmap":
+-            self._translator.addCharacterMap(self._orig, self._repl)
+         elif self._path == ".transtable.YABTdata.rule":
+             self._addRule()
+         elif self._path.startswith(".transtable.metadata.YABT_custom_matches."):
+@@ -155,11 +146,7 @@
+ 
+     def _characterData(self, data):
+         """Method called when a text element is encountered"""
+-        if self._path == ".transtable.YABTdata.charmap.orig":
+-            self._orig += data
+-        elif self._path == ".transtable.YABTdata.charmap.repl":
+-            self._repl += data
+-        elif self._path == ".transtable.YABTdata.rule.iclass":
++        if self._path == ".transtable.YABTdata.rule.iclass":
+             self._iclass += data
+         elif self._path == ".transtable.YABTdata.rule.focus":
+             self._focus += data
+diff -r b596426d58de -r 1986a5654141 YABT/translators.py
+--- a/YABT/translators.py	Fri May 01 10:08:09 2009 +0000
++++ b/YABT/translators.py	Mon Jun 29 17:58:07 2009 +0100
+@@ -19,12 +19,18 @@
+ 
+ logging.getLogger("YABT.translators").manager.emittedNoHandlerWarning = True
+ 
++class TranslatorText(unicode):
++    def __new__(cls, text):
++        return unicode(text.upper())
++    def __init__(self, text):
++        self.orig = text
++        print(self)
++
+ class BaseTranslator(psyobj):
+     """
+     The super class for all translator classes
+ 
+     Methods are:
+-    addCharacterMap: Add a character mapping
+     addState: Add a state to the known list of states
+     addRule: Add a rule to the translator
+     load: Load a loader object
+@@ -35,17 +41,6 @@
+ 
+     """
+ 
+-    def addCharacterMap(self, orig, repl):
+-        """
+-        Add a character mapping to the translator
+-
+-        Arguments are:
+-        orig: the original character
+-        repl: the replacement character
+-
+-        """
+-        raise NotImplementedError("Class is abstract")
+-
+     def addState(self, state):
+         """
+         Adds a state to the list of known states
+@@ -110,7 +105,6 @@
+     """
+     The class for doing text translation
+ 
+-    addRule: A method to add a rule to the translator.
+     addState: adds a state to the list of known states
+     addCharacterMap: Add a character mapping to the translator.
+     getStates: Show all valid states for the translator.
+@@ -124,7 +118,6 @@
+         self._logger = logging.getLogger("YABT.translators.Translator")
+         if self._logger.level == 0:
+             self._logger.setLevel(logging.WARNING)
+-        self._charMaps = {}
+         self._rules = []
+         self.state = 0
+         self._states = set()
+@@ -153,19 +146,6 @@
+             self._logger.info("Adding state " + str(state))
+         self._states.add(state)
+ 
+-    def addCharacterMap(self, orig, repl):
+-        """
+-        Adds a character mapping to the translator
+-
+-        Arguments are:
+-        orig: The original character.
+-        repl: the character to replace orig with.
+-
+-        """
+-        if self._logger.isEnabledFor(logging.INFO):
+-            self._logger.info("Adding charmap from " + orig + " to " + repl)
+-        self._charMaps.update({orig: repl})
+-
+     def noRuleHandler(self, state, text, start, end):
+         """
+         This implementation simply inserts the character into the output
+@@ -202,9 +182,8 @@
+         output = array.array("u")
+         position = len(bfcontext)
+         end = position + len(text)
+-        fullText = u"".join([bfcontext, text, afcontext])
+-        for orig, repl in self._charMaps.iteritems():
+-            fullText = fullText.replace(orig, repl)
++        origText = u"".join([bfcontext, text, afcontext])
++        fullText = TranslatorText(origText)
+         while position < end:
+             selectedRule = None
+             for rule in self._rules:
+diff -r b596426d58de -r 1986a5654141 tests/YABT/loaders.py
+--- a/tests/YABT/loaders.py	Fri May 01 10:08:09 2009 +0000
++++ b/tests/YABT/loaders.py	Mon Jun 29 17:58:07 2009 +0100
+@@ -8,11 +8,8 @@
+ 
+ class FakeTranslator:
+     def __init__(self):
+-        self.charMaps = 0
+         self.states = 0
+         self.rules = 0
+-    def addCharacterMap(self, orig, repl):
+-        self.charMaps += 1
+     def addState(self, state):
+         self.states += 1
+     def addRule(self, rule):
+@@ -43,7 +40,6 @@
+     def testLoad(self):
+         t = FakeTranslator()
+         t.load(self.loader)
+-        self.assertEquals(28, t.charMaps)
+         self.assertEquals(13, t.states)
+         self.assertEquals(1, t.rules)
+ 
+@@ -69,7 +65,6 @@
+     def testLoad(self):
+         t = FakeTranslator()
+         t.load(self.loader)
+-        self.assertEquals(28, t.charMaps)
+         self.assertEquals(13, t.states)
+         self.assertEquals(1, t.rules)
+ 
+
+

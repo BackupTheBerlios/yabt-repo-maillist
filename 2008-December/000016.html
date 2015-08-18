@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.c60cd8a2a262.1229294833.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000015.html">
+   <LINK REL="Next"  HREF="000017.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: 2 new changesets</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%202%20new%20changesets&In-Reply-To=%3Chg.c60cd8a2a262.1229294833.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: 2 new changesets">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Sun Dec 14 23:47:13 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000015.html">[Yabt-repo] /hgroot/repos/yabt: Added a -o or --output option to	YABT_transl...
+</A></li>
+        <LI>Next message: <A HREF="000017.html">[Yabt-repo] /hgroot/repos/yabt: Altered README description of YABT	to match ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/c60cd8a2a262
+changeset: 89:c60cd8a2a262
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Sun Dec 14 22:51:49 2008 +0000
+description:
+Made YABT_translate accept input from STDIN as well as from file.
+
+details:   /hgroot/repos/yabt/rev/6f005b237df6
+changeset: 90:6f005b237df6
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Sun Dec 14 22:55:58 2008 +0000
+description:
+Changed the script name to yabt-trans and modified documentation accordingly.
+
+diffstat:
+
+3 files changed, 15 insertions(+), 8 deletions(-)
+README      |    6 +++---
+YABT/app.py |   15 +++++++++++----
+setup.py    |    2 +-
+
+diffs (73 lines):
+
+diff -r 1e4af655eb43 -r 6f005b237df6 README
+--- a/README	Fri Dec 12 11:08:47 2008 +0000
++++ b/README	Sun Dec 14 22:55:58 2008 +0000
+@@ -74,9 +74,9 @@
+ Included scripts
+ ================
+ 
+-YABT comes with one script to perform a translation. The script name is ``YABT_translate``. For details on 
+-``YABT_translate`` please give it the ``--help`` option. ``YABT_translate`` takes a file on the command line and prints 
+-the translated version to standard out.
++YABT comes with one script to perform a translation. The script name is ``yabt-trans``. For details on 
++``yabt-trans`` please give it the ``--help`` option. ``yabt-trans`` takes a file on the command line or input from 
++standard input and prints the translated version to standard out.
+ 
+ Documentation
+ =============
+diff -r 1e4af655eb43 -r 6f005b237df6 YABT/app.py
+--- a/YABT/app.py	Fri Dec 12 11:08:47 2008 +0000
++++ b/YABT/app.py	Sun Dec 14 22:55:58 2008 +0000
+@@ -1,5 +1,6 @@
+ &quot;&quot;&quot;A module containing functions for scripts&quot;&quot;&quot;
+ 
++import sys
+ import optparse
+ import os.path
+ from pkg_resources import *
+@@ -25,8 +26,6 @@
+                       &quot;[DEFAULT %default]&quot;)
+     parser.set_defaults(table=&quot;britishtobrl.xml&quot;, state=2, outfile=None)
+     options, args = parser.parse_args()
+-    if len(args) != 1:
+-        parser.error(&quot;You need to specify an input file&quot;)
+     loader = loaders.BasicXMLStringLoader()
+     translator = translators.BufferedTranslator()
+     if resource_exists(&quot;YABT&quot;, &quot;tables/&quot; + options.table):
+@@ -39,7 +38,15 @@
+         finally: inFile.close()
+     else:
+         parser.error(&quot;Table couldn't be found&quot;)
+-    if os.path.exists(args[0]):
++    inText = &quot;&quot;
++    if len(args) == 0:
++        line = sys.stdin.readline()
++        while line != &quot;&quot;:
++            inText += unicode(line, 'latin1')
++            line = sys.stdin.readline()
++    elif len(args) &gt; 1:
++        parser.error(&quot;Only one input file should be specified&quot;)
++    elif os.path.exists(args[0]):
+         try:
+             inFile = open(args[0], 'r')
+             inText = unicode(inFile.read(), &quot;latin1&quot;)
+@@ -50,7 +57,7 @@
+     translator.load(loader)
+     output = translator.translate(inText, options.state, &quot; &quot;, &quot; &quot;)
+     if options.outfile is None:
+-        print(output)
++        sys.stdout.write(output)
+     else:
+         try:
+             f = open(options.outfile, 'w')
+diff -r 1e4af655eb43 -r 6f005b237df6 setup.py
+--- a/setup.py	Fri Dec 12 11:08:47 2008 +0000
++++ b/setup.py	Sun Dec 14 22:55:58 2008 +0000
+@@ -35,7 +35,7 @@
+ ],
+ packages=['YABT'],
+ package_data={'YABT': ['tables/britishtobrl.xml']},
+-entry_points={'console_scripts':['YABT_translate = YABT.app:standardTranslate']},
++entry_points={'console_scripts':['yabt-trans = YABT.app:standardTranslate']},
+ test_suite=&quot;tests&quot;
+ )
+ 
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000015.html">[Yabt-repo] /hgroot/repos/yabt: Added a -o or --output option to	YABT_transl...
+</A></li>
+	<LI>Next message: <A HREF="000017.html">[Yabt-repo] /hgroot/repos/yabt: Altered README description of YABT	to match ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#16">[ date ]</a>
+              <a href="thread.html#16">[ thread ]</a>
+              <a href="subject.html#16">[ subject ]</a>
+              <a href="author.html#16">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

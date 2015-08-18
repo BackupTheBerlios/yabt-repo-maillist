@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: Added version.py which is my first	attempt a...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20Added%20version.py%20which%20is%20my%20first%0A%09attempt%20a...&In-Reply-To=%3Chg.58ff89ffd8ed.1227996416.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000001.html">
+   <LINK REL="Next"  HREF="000003.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: Added version.py which is my first	attempt a...</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20Added%20version.py%20which%20is%20my%20first%0A%09attempt%20a...&In-Reply-To=%3Chg.58ff89ffd8ed.1227996416.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: Added version.py which is my first	attempt a...">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Sat Nov 29 23:06:56 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000001.html">[Yabt-repo] /hgroot/repos/yabt: Changed to using date to denote	development ...
+</A></li>
+        <LI>Next message: <A HREF="000003.html">[Yabt-repo] /hgroot/repos/yabt: This is a corrected verion of	version.py.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2">[ date ]</a>
+              <a href="thread.html#2">[ thread ]</a>
+              <a href="subject.html#2">[ subject ]</a>
+              <a href="author.html#2">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/58ff89ffd8ed
+changeset: 67:58ff89ffd8ed
+user:      Michael Whapples &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/yabt-repo">mwhapples at users.berlios.de</A>&gt;
+date:      Sat Nov 29 22:14:57 2008 +0000
+description:
+Added version.py which is my first attempt at a module to deal with commit version numbers. It is not currently used as
+I don't know how this will behave under cases when no mercurial/repository is present.
+
+diffstat:
+
+1 files changed, 38 insertions(+)
+version.py |   38 ++++++++++++++++++++++++++++++++++++++
+
+diffs (42 lines):
+
+diff -r 73113731db73 -r 58ff89ffd8ed version.py
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/version.py	Sat Nov 29 22:14:57 2008 +0000
+@@ -0,0 +1,38 @@
++&quot;&quot;&quot;Module to retrieve version information about the repository&quot;&quot;&quot;
++from __future__ import with_statement
++import binascii
++import re
++
++repository = None
++info = None
++
++try:
++    from mercurial import hg, context, repo, node, ui
++except ImportError:
++    pass
++else:
++    try:
++        repository = hg.repository(ui.ui(), '.')
++    except repo.RepoError:
++        pass
++    else:
++        ctx = context.changectx(repository)
++        info = {'rev': ctx.rev(), 'node': binascii.hexlify(ctx.node())}
++
++def getVersion(bv):
++    global info
++    if info is None:
++        # This doesn't seem to exist in mercurial, assume release
++        # Try and use PKG-INFO
++        with open('PKG-INFO') as f:
++            pattern = re.compile('^Version:\s+(\S+)')
++            for line in f:
++                mo = pattern.match(line)
++                if mo is not None:
++                    return mo.group(1)
++        return bv
++    if not bv.endswith('.dev'):
++        # This is a release version
++        return bv
++    return &quot;%s-r%s_%s&quot; % (bv, info['rev'], info['node'])
++
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000001.html">[Yabt-repo] /hgroot/repos/yabt: Changed to using date to denote	development ...
+</A></li>
+	<LI>Next message: <A HREF="000003.html">[Yabt-repo] /hgroot/repos/yabt: This is a corrected verion of	version.py.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2">[ date ]</a>
+              <a href="thread.html#2">[ thread ]</a>
+              <a href="subject.html#2">[ subject ]</a>
+              <a href="author.html#2">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: Adjusted README so that the list is	correct ...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20Adjusted%20README%20so%20that%20the%20list%20is%0A%09correct%20...&In-Reply-To=%3Chg.aa0cafd4b949.1238574640.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000022.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: Adjusted README so that the list is	correct ...</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20Adjusted%20README%20so%20that%20the%20list%20is%0A%09correct%20...&In-Reply-To=%3Chg.aa0cafd4b949.1238574640.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: Adjusted README so that the list is	correct ...">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Wed Apr  1 10:30:40 CEST 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000022.html">[Yabt-repo] /hgroot/repos/yabt: 3 new changesets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#21">[ date ]</a>
+              <a href="thread.html#21">[ thread ]</a>
+              <a href="subject.html#21">[ subject ]</a>
+              <a href="author.html#21">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/aa0cafd4b949
+changeset: 100:aa0cafd4b949
+user:      Michael Whapples
+date:      Wed Apr 01 08:30:57 2009 +0000
+description:
+Adjusted README so that the list is correct RST.
+
+diffstat:
+
+ README      |  1 +
+ YABT/app.py |  2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
+
+diffs (23 lines):
+
+diff -r 1de9f4f38541 -r aa0cafd4b949 README
+--- a/README	Sun Mar 22 10:59:13 2009 +0000
++++ b/README	Wed Apr 01 08:30:57 2009 +0000
+@@ -20,6 +20,7 @@
+ ------------
+ 
+ YABT is a context sensitive string manipulation tool written entirely in the python programming language. YABT has two main aims:
++
+ * To provide a translation library to be used with in other applications. The exact translation performed depends on what rules are used in the translator. Currently YABT is shipped with a translation system which uses a finite state machine and context matching along with a table for translating text into British Braille, although other translation systems should be possible to develop and other uses could be found by creating alternative tables (eg. a table could be created for preparing text for a speech synthesiser).
+ * The other use is to develop other translation systems which can be used by any application using YABT. This side of YABT has not been fully explored and is likely to develop and change over time.
+ 
+diff -r 1de9f4f38541 -r aa0cafd4b949 YABT/app.py
+--- a/YABT/app.py	Sun Mar 22 10:59:13 2009 +0000
++++ b/YABT/app.py	Wed Apr 01 08:30:57 2009 +0000
+@@ -13,7 +13,7 @@
+     &quot;&quot;&quot;YABT_translate script&quot;&quot;&quot;
+     global distro
+     inFile = None
+-    parser = optparse.OptionParser(usage=&quot;%prog [OPTIONS] INFILE&quot;, 
++    parser = optparse.OptionParser(usage=&quot;%prog [OPTIONS] INFILE&quot;,
+                                    version=&quot;%prog &quot; + distro.version)
+     parser.add_option(&quot;-t&quot;, &quot;--table&quot;, dest=&quot;table&quot;, 
+                       help=&quot;use the table specified for translation &quot; +
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000022.html">[Yabt-repo] /hgroot/repos/yabt: 3 new changesets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#21">[ date ]</a>
+              <a href="thread.html#21">[ thread ]</a>
+              <a href="subject.html#21">[ subject ]</a>
+              <a href="author.html#21">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>

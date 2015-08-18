@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Yabt-repo] /hgroot/repos/yabt: dded a CFG file for stdeb,	to create a debia...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/yabt-repo/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20dded%20a%20CFG%20file%20for%20stdeb%2C%0A%09to%20create%20a%20debia...&In-Reply-To=%3Chg.b596426d58de.1241172609.-2036687633%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000024.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Yabt-repo] /hgroot/repos/yabt: dded a CFG file for stdeb,	to create a debia...</H1>
+    <B>mwhapples at users.berlios.de</B> 
+    <A HREF="mailto:yabt-repo%40lists.berlios.de?Subject=Re%3A%20%5BYabt-repo%5D%20/hgroot/repos/yabt%3A%20dded%20a%20CFG%20file%20for%20stdeb%2C%0A%09to%20create%20a%20debia...&In-Reply-To=%3Chg.b596426d58de.1241172609.-2036687633%40sheep.berlios.de%3E"
+       TITLE="[Yabt-repo] /hgroot/repos/yabt: dded a CFG file for stdeb,	to create a debia...">mwhapples at users.berlios.de
+       </A><BR>
+    <I>Fri May  1 12:10:09 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000024.html">[Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>details:   /hgroot/repos/yabt/rev/b596426d58de
+changeset: 107:b596426d58de
+user:      Michael Whapples
+date:      Fri May 01 10:08:09 2009 +0000
+description:
+dded a CFG file for stdeb, to create a debian package run:
+stdeb_run_setup --extra-cfg=stdeb.cfg
+cd deb_dist/yabt-2.0
+dpkg-buildpackage
+
+diffstat:
+
+ stdeb.cfg |  2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diffs (6 lines):
+
+diff -r 9d351a7cfbeb -r b596426d58de stdeb.cfg
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/stdeb.cfg	Fri May 01 10:08:09 2009 +0000
+@@ -0,0 +1,2 @@
++[YABT]
++XS-Python-Version: &gt;= 2.5
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000024.html">[Yabt-repo] /hgroot/repos/yabt: 2 new changesets
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/yabt-repo">More information about the Yabt-repo
+mailing list</a><br>
+</body></html>
